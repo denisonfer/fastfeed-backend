@@ -13,6 +13,10 @@ class Couriers extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.belongsTo(models.Avatars, { foreignKey: 'avatar_id', as: 'avatar' });
+  }
 }
 
 export default Couriers;
