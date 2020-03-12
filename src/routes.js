@@ -6,6 +6,7 @@ import SessionController from './app/controllers/sessionController';
 import RecipientsController from './app/controllers/recipientsController';
 import CouriersController from './app/controllers/couriersController';
 import AvatarsController from './app/controllers/avatarController';
+import OrdersController from './app/controllers/ordersController';
 
 import authMiddleware from './app/middleware/auth';
 
@@ -36,5 +37,11 @@ routes.delete('/entregadores/:id', CouriersController.delete);
 
 // Rota para upload do avatar
 routes.post('/avatars', up_avatar.single('file'), AvatarsController.store);
+
+// Rota para encomendas
+routes.get('/encomendas', OrdersController.index);
+routes.post('/encomendas', OrdersController.store);
+routes.put('/encomendas/:id', OrdersController.update);
+routes.delete('/encomendas/:id', OrdersController.delete);
 
 export default routes;
