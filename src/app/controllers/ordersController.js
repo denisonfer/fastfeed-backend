@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
 import Orders from '../models/orders';
+import Recipients from '../models/recipients';
+import Couriers from '../models/couriers';
+import Mail from '../../lib/mail';
 
 class OrdersController {
   async index(req, res) {
@@ -24,8 +27,34 @@ class OrdersController {
       return res.status(401).json('Dados inválidos, favor verificar');
     }
 
+    // Validação do destinatário
+    const recipient = await Recipients.findByPk(req.body.recipient_id);
+
+    if (!recipient) {
+      return res.status(401).json('Destinatário não localizado!');
+    }
+
+    // Validação do entregador
+    const courier = await Couriers.findByPk(req.body.couriers_id);
+
+    if (!courier) {
+      return res.status(401).json('Entregador não localizado!');
+    }
+
     // Criação da encomenda
     const newOrder = await Orders.create(req.body);
+
+    // Envio de E-mail para entregador
+    await Mail.sendMail({
+      to: `${courier.name} <${courier.email}>`,
+      subject: 'Você tem uma encomenda',
+      template: 'orderInfo',
+      context: {
+        courier: courier.name,
+        product: newOrder.product,
+        recipient: recipient.name,
+      },
+    });
 
     return res.json({
       msg: 'Encomenda cadastrada com sucesso!',
