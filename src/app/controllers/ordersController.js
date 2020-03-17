@@ -11,6 +11,22 @@ class OrdersController {
     return res.json(listOrders);
   }
 
+  async show(req, res) {
+    // Validação do entregador
+    const courier = await Couriers.findByPk(req.params.id);
+
+    if (!courier) {
+      return res.status(401).json('Entregador não localizado!');
+    }
+
+    // Busca encomenda para o entregador ONDE não esteja cancelada ou entregue.
+    const listOrders = await Orders.findAll({
+      where: { couriers_id: courier.id, canceled_at: null, end_date: null },
+    });
+
+    return res.json(listOrders);
+  }
+
   async store(req, res) {
     // Validação dos dados recebidos
     const schema = Yup.object().shape({

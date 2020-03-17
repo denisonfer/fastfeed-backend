@@ -7,6 +7,7 @@ import RecipientsController from './app/controllers/recipientsController';
 import CouriersController from './app/controllers/couriersController';
 import AvatarsController from './app/controllers/avatarController';
 import OrdersController from './app/controllers/ordersController';
+import FilterOrderController from './app/controllers/filterOrderController';
 
 import authMiddleware from './app/middleware/auth';
 
@@ -40,6 +41,11 @@ routes.post('/avatars', up_avatar.single('file'), AvatarsController.store);
 
 // Rota para encomendas
 routes.get('/encomendas', OrdersController.index);
+routes.get('/encomendas/:id/entregadores/aberto', OrdersController.show);
+routes.get(
+  '/encomendas/:id/entregadores/entregue',
+  FilterOrderController.index
+);
 routes.post('/encomendas', OrdersController.store);
 routes.put('/encomendas/:id', OrdersController.update);
 routes.delete('/encomendas/:id', OrdersController.delete);
