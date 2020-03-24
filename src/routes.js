@@ -8,6 +8,7 @@ import CouriersController from './app/controllers/couriersController';
 import AvatarsController from './app/controllers/avatarController';
 import OrdersController from './app/controllers/ordersController';
 import HandleOrderController from './app/controllers/handleOrderController';
+import Delivery_problemsController from './app/controllers/delivery_problemController';
 
 import authMiddleware from './app/middleware/auth';
 
@@ -52,6 +53,15 @@ routes.get(
 routes.get(
   '/encomendas/:id/entregadores/disponivel/:idOrder',
   HandleOrderController.avaliableOrder
+);
+
+// Rota para relatar problemas nas encomendas
+routes.get('/problemas', Delivery_problemsController.index);
+routes.get('/problemas/:idOrder/encomenda', Delivery_problemsController.show);
+routes.post('/problemas/:idOrder/encomenda', Delivery_problemsController.store);
+routes.delete(
+  '/problemas/:idProblem/cancelamento',
+  Delivery_problemsController.delete
 );
 
 export default routes;
