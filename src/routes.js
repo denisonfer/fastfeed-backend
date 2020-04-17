@@ -29,10 +29,12 @@ routes.use(authMiddleware);
 routes.put('/usuarios', UserController.update);
 
 // Rotas para destinatário
+routes.get('/destinatarios', RecipientsController.index);
 routes.post('/destinatarios', RecipientsController.store);
 routes.put('/destinatarios/:id', RecipientsController.update);
 
 // Rotas para entregador
+routes.get('/entregadores', CouriersController.index);
 routes.post('/entregadores', CouriersController.store);
 routes.put('/entregadores/:id', CouriersController.update);
 routes.delete('/entregadores/:id', CouriersController.delete);

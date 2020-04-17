@@ -1,7 +1,24 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
+
 import Recipients from '../models/recipients';
 
 class RecipientsController {
+  async index(req, res) {
+    const search = req.query.q;
+
+    if (search) {
+      const findRecipient = await Recipients.findAll({
+        where: { name: { [Op.like]: `%${search}%` } },
+      });
+      return res.json({ findRecipient });
+    }
+
+    const allRecipients = await Recipients.findAll();
+
+    return res.json({ allRecipients });
+  }
+
   async store(req, res) {
     // Validação dos dados
     const schema = Yup.object().shape({

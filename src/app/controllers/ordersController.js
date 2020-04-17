@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Orders from '../models/orders';
 import Recipients from '../models/recipients';
 import Couriers from '../models/couriers';
@@ -6,9 +7,18 @@ import Mail from '../../lib/mail';
 
 class OrdersController {
   async index(req, res) {
-    const listOrders = await Orders.findAll();
+    const search = req.query.q;
 
-    return res.json(listOrders);
+    if (search) {
+      const findOrder = await Orders.findAll({
+        where: { product: { [Op.like]: `%${search}%` } },
+      });
+      return res.json({ findOrder });
+    }
+
+    const allOrders = await Orders.findAll();
+
+    return res.json({ allOrders });
   }
 
   async show(req, res) {
